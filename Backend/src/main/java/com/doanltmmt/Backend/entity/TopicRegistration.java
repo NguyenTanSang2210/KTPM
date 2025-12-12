@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import com.doanltmmt.Backend.entity.Lecturer;
 
 @Entity
 @Table(name = "topic_registration")
@@ -27,6 +28,17 @@ public class TopicRegistration {
     @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
-    @Column(nullable = false)
-    private boolean approved = false;
+    @Column(nullable = true)
+    private Boolean approved; // null: chờ duyệt, true: đã duyệt, false: từ chối
+
+    @Column(name = "reject_reason", length = 500)
+    private String rejectReason;
+
+    // Nhật ký duyệt/từ chối
+    @ManyToOne
+    @JoinColumn(name = "reviewer_id")
+    private Lecturer reviewer; // giảng viên thực hiện duyệt/từ chối
+
+    @Column(name = "reviewed_at")
+    private LocalDateTime reviewedAt;
 }

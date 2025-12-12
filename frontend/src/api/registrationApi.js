@@ -1,34 +1,39 @@
-const API_BASE_URL = "http://localhost:8080/api";
+import api from "../api";
 
 export const registrationApi = {
   registerTopic: async (studentId, topicId) => {
-    const res = await fetch(
-      `${API_BASE_URL}/registration/register?studentId=${studentId}&topicId=${topicId}`,
-      { method: "POST" }
-    );
-    if (!res.ok) throw new Error("Đăng ký đề tài thất bại");
-    return res.json();
+    const res = await api.post("/registration/register", null, {
+      params: { studentId, topicId },
+    });
+    return res.data;
   },
 
   getByTopic: async (topicId) => {
-    const res = await fetch(`${API_BASE_URL}/registration/topic/${topicId}`);
-    if (!res.ok) throw new Error("Không tải được danh sách đăng ký");
-    return res.json();
+    const res = await api.get(`/registration/topic/${topicId}`);
+    return res.data;
   },
 
   approve: async (regId) => {
-    const res = await fetch(`${API_BASE_URL}/registration/approve/${regId}`, {
-      method: "POST",
-    });
-    if (!res.ok) throw new Error("Duyệt thất bại");
-    return res.json();
+    const res = await api.post(`/registration/approve/${regId}`);
+    return res.data;
   },
 
-  reject: async (regId) => {
-    const res = await fetch(`${API_BASE_URL}/registration/reject/${regId}`, {
-      method: "POST",
+  reject: async (regId, reason) => {
+    const res = await api.post(`/registration/reject/${regId}`, null, {
+      params: { reason },
     });
-    if (!res.ok) throw new Error("Từ chối thất bại");
-    return res.json();
+    return res.data;
+  },
+
+  getMine: async (studentId) => {
+    const res = await api.get(`/registration/mine`, {
+      params: { studentId },
+    });
+    return res.data;
+  },
+
+  cancel: async (regId) => {
+    const res = await api.post(`/registration/cancel/${regId}`);
+    return res.data;
   },
 };

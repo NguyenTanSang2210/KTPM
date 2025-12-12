@@ -1,9 +1,29 @@
-const API_BASE_URL = "http://localhost:8080/api";
+import api from "../api";
 
 export const topicApi = {
-  getAllTopics: async () => {
-    const res = await fetch(`${API_BASE_URL}/topics`);
-    if (!res.ok) throw new Error("Không tải được danh sách đề tài");
-    return res.json();
+  // params: { studentId, query, status, lecturerId, page, size }
+  getAllTopics: async (params = {}) => {
+    const res = await api.get("/topics", { params });
+    return res.data;
+  },
+  create: async (lecturerId, payload) => {
+    const res = await api.post("/topics/create", payload, { params: { lecturerId } });
+    return res.data;
+  },
+  update: async (id, lecturerId, payload) => {
+    const res = await api.put(`/topics/${id}`, payload, { params: { lecturerId } });
+    return res.data;
+  },
+  remove: async (id, lecturerId) => {
+    const res = await api.delete(`/topics/${id}`, { params: { lecturerId } });
+    return res.data;
+  },
+  open: async (id, lecturerId) => {
+    const res = await api.post(`/topics/${id}/open`, null, { params: { lecturerId } });
+    return res.data;
+  },
+  close: async (id, lecturerId) => {
+    const res = await api.post(`/topics/${id}/close`, null, { params: { lecturerId } });
+    return res.data;
   },
 };

@@ -9,6 +9,8 @@ export default function RegistrationTable({ data, onApproveClick, onRejectClick,
           <th>Lớp</th>
           <th>Họ tên</th>
           <th>Ngày đăng ký</th>
+          <th>Người xử lý</th>
+          <th>Thời gian xử lý</th>
           <th>Trạng thái</th>
           <th>Hành động</th>
         </tr>
@@ -16,7 +18,7 @@ export default function RegistrationTable({ data, onApproveClick, onRejectClick,
       <tbody>
         {data.length === 0 && (
           <tr>
-            <td colSpan="7" className="text-center text-muted">
+            <td colSpan="9" className="text-center text-muted">
               Chưa có sinh viên đăng ký
             </td>
           </tr>
@@ -32,12 +34,16 @@ export default function RegistrationTable({ data, onApproveClick, onRejectClick,
               <td>{student?.studentCode}</td>
               <td>{student?.className}</td>
               <td>{user?.fullName}</td>
-              <td>{r.registeredAt}</td>
+              <td>{new Date(r.registeredAt).toLocaleString()}</td>
+              <td>{r.reviewer?.user?.fullName || "-"}</td>
+              <td>{r.reviewedAt ? new Date(r.reviewedAt).toLocaleString() : "-"}</td>
               <td>
-                {r.approved ? (
+                {r.approved === null ? (
+                  <span className="badge bg-secondary">CHƯA DUYỆT</span>
+                ) : r.approved === true ? (
                   <span className="badge bg-success">ĐÃ DUYỆT</span>
                 ) : (
-                  <span className="badge bg-secondary">CHƯA DUYỆT</span>
+                  <span className="badge bg-danger" title={r.rejectReason || ""}>TỪ CHỐI</span>
                 )}
               </td>
               <td>
